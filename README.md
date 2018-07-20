@@ -9,7 +9,7 @@ Tkinter
 `$ python scraper.py`
 
 # Example
-The following contains HTML source code from the (https://www.w3schools.com/html/html_tables.asp "W3Schools") website:
+The following table comes from (https://www.w3schools.com/html/html_tables.asp)
 <table id="customers">
   <tr>
     <th>Company</th>
