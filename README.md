@@ -3,6 +3,7 @@ HTML table scraping using ScraPy
 
 # Dependencies
 [ScraPy](https://scrapy.org/download/)
+
 Tkinter
 
 # Execution
