@@ -10,7 +10,7 @@ class itemSpider(scrapy.Spider):
 
 	def parse(self,response):
 		item = tableItem()
-		rows = response.xpath('//table[@$ATTRIBUTE="$VALUE"]//tr')
-		for row in rows[0:]: # insert row extraction here
+		rows = response.xpath('//table[@$ATTRIBUTE="$VALUE"]/tr')
+		for row in rows[1:]: # insert row extraction here
 		
 			yield item

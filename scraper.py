@@ -43,11 +43,11 @@ def generateSpider(): # generates a Scrapy spider using user inputs
 
 	# fill in column headers
 	for x in range(numberOfColumns):
-		contents.insert(x+3, "\t_" + str(x) + " = scrapy.Field()\n")
+		contents.insert(x+5, "\t_" + str(x) + " = scrapy.Field()\n")
 
 	# fill in data extraction code
 	for z in range(numberOfColumns):
-		contents.insert(z+12+numberOfColumns, "\t\t\titem['_" + str(z) + "'] = row.xpath('td[" + str(z + 1) + "]/text()').extract()\n")
+		contents.insert(z+14+numberOfColumns, "\t\t\titem['_" + str(z) + "'] = row.xpath('td[" + str(z + 1) + "]/text()').extract()\n")
 
 	spiderFile = open(projectName + "-spider.py", "w+") # create new tailored spider file
 	contents = "".join(contents) # join contents into single string
@@ -81,7 +81,7 @@ def cleanUp(): # clear gui fields
 def scrape(): # high level function execution
 	generateSpider() # generate custom spider
 	runScrapy() # run scrapy
-	time.sleep(1) # wait for runScrapy to finish
+	time.sleep(3) # wait for runScrapy to finish
 	cleanUp() # remove unnecessary files
  
 ##### MAIN ROUTINE #####
