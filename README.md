@@ -1,5 +1,5 @@
 # Web-Table-Scraper
-An HTML table scraping using ScraPy
+A simple HTML table scraping program using ScraPy
 
 # Dependencies
 [ScraPy](https://scrapy.org/download/)
@@ -53,10 +53,4 @@ In order to scrape this table, find a uniquely identifying attribute for this ta
 
 The tag for this table reads ```<table id="customers">```, so the field entries should look like
 
-**URL:** https://www.w3schools.com/html/html_tables.asp
-
-**Table Attribute:** id
-
-**Attribtue Value:** customers
-
-**Number of Columns:** 3
+![Example Image](https://github.com/jonwoong/Web-Table-Scraper/blob/master/example.png)
