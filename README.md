@@ -1,5 +1,5 @@
 # Web-Table-Scraper
-A simple HTML table scraping program for macOS using ScraPy
+A simple HTML table scraping program for using ScraPy
 
 # Dependencies
 [ScraPy](https://scrapy.org/download/)
