@@ -48,8 +48,9 @@ The following contains HTML source code from the (https://www.w3schools.com/html
   </tr>
 </table>
 
-In order to scrape this table, find a uniquely identifying attribute for this table and its value:
-`URL: https://www.w3schools.com/html/html_tables.asp`
-`Table Attribute: id`
-`Attribtue Value: customers`
-`Number of Columns: 3`
+In order to scrape this table, find a uniquely identifying attribute for this table and its value.
+The tag for this table reads <table id="customers">
+URL: https://www.w3schools.com/html/html_tables.asp
+Table Attribute: id
+Attribtue Value: customers
+Number of Columns: 3
