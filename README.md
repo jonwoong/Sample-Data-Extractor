@@ -1,5 +1,5 @@
 # Web-Table-Scraper
-An HTML table scraping using ScraPy
+A simple HTML table scraping program using ScraPy
 
 # Dependencies
 [ScraPy](https://scrapy.org/download/)
