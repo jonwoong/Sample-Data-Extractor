@@ -9,7 +9,7 @@ Tkinter
 `$ python scraper.py`
 
 # Example
-The following table comes from (https://www.w3schools.com/html/html_tables.asp)
+The following table comes from https://www.w3schools.com/html/html_tables.asp:
 <table id="customers">
   <tr>
     <th>Company</th>
