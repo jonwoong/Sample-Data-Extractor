@@ -10,7 +10,7 @@ Tkinter
 
 # Example
 The following contains HTML source code from the (https://www.w3schools.com/html/html_tables.asp "W3Schools") website:
-`<table id="customers">
+<table id="customers">
   <tr>
     <th>Company</th>
     <th>Contact</th>
@@ -46,10 +46,10 @@ The following contains HTML source code from the (https://www.w3schools.com/html
     <td>Giovanni Rovelli</td>
     <td>Italy</td>
   </tr>
-</table>`
+</table>
 
 In order to scrape this table, find a uniquely identifying attribute for this table and its value:
-`URL: https://www.w3schools.com/html/html_tables.asp
-Table Attribute: id
-Attribtue Value: customers
-Number of Columns: 3`
+`URL: https://www.w3schools.com/html/html_tables.asp`
+`Table Attribute: id`
+`Attribtue Value: customers`
+`Number of Columns: 3`
