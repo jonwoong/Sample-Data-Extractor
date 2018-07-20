@@ -49,7 +49,7 @@ The following contains HTML source code from the (https://www.w3schools.com/html
 </table>
 
 In order to scrape this table, find a uniquely identifying attribute for this table and its value.
-The tag for this table reads <table id="customers">
+The tag for this table reads "<table id="customers">"
 URL: https://www.w3schools.com/html/html_tables.asp
 Table Attribute: id
 Attribtue Value: customers
