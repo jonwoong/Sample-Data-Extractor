@@ -53,4 +53,4 @@ In order to scrape this table, find a uniquely identifying attribute for this ta
 
 The tag for this table reads ```<table id="customers">```, so the field entries should look like
 
-![Example Image](https://github.com/jonwoong/Web-Table-Scraper/blob/master/example.png)
+![Example Image](https://github.com/jonwoong/Web-Table-Scraper/blob/master/example-image.png)
