@@ -11,83 +11,84 @@ import time
 
 ##### DATA STRUCTURES #####
 
-userInput = {} # dictionary to store user input values
-root = tk.Tk() # root of gui
-root.title("Web Table Scraper")
+fields = ['Project Name', 'Website URL', 'Table Attribute', 'Attribute Value', 'Number of Columns']
+entries = []
 
 ##### METHODS #####
 
-def getFields(): # stores user gui input into dictionary
-	userInput['project'] = projectNameEntry.get() # get project name
-	userInput['columns'] = columnField.get() # get number of columns
-	userInput['url']  = urlEntry.get() # get url
-	userInput['tableAttribute']  = tableAttributeEntry.get() # get table attribute
-	userInput['tableAttributeValue'] = tableAttributeValueEntry.get() # get value of table attribute
+def generateForm(root,fields): # adapted from python-course.eu
+	for field in fields:
+		row = Frame(root) # create frame for row
+		label = Label(row, text=field, anchor='w') # create label in row
+		row.pack(side=TOP, fill=X, padx=5, pady=5) # initialize row
+		label.pack(side=LEFT) # initialize label
+		entry = Entry(row) # create entry field
+		entry.pack(side=RIGHT, expand=YES, fill=X) # initialize entry field
+		entries.append((field,entry)) # store user choice
+	return entries
 
 def generateSpider(): # generates a Scrapy spider using user inputs
-	with open(userInput['project'] + ".py", "w") as newSpiderFile: # creates new file
-		newSpiderFile.write("import scrapy\n") 
-		newSpiderFile.write("from scrapy import log\n")
-		newSpiderFile.write("class tableItem(scrapy.Item):\n") # set Scrapy iterable
-		for x in range(int(userInput['columns'])):
-			newSpiderFile.write("\t_" + str(x) + " = scrapy.Field()\n")
-		newSpiderFile.write("class itemSpider(scrapy.Spider):\n") # define spider class
-		newSpiderFile.write("\tname = '" + userInput['project'] + "'\n")
-		newSpiderFile.write("\tstart_urls = ['" + userInput['url'] + "']\n")
-		newSpiderFile.write("\tdef parse(self, response):\n")
-		newSpiderFile.write("\t\titem = tableItem()\n")
-		newSpiderFile.write("\t\trows = response.xpath('//table[@" + userInput['tableAttribute'] + "\"=" + userInput['tableAttributeValue'] + "\"]/tr')\n") # identify table to scrape
-		newSpiderFile.write("\t\tfor row in rows[1:]:\n")
-		for x in range(int(userInput['columns'])):
-			newSpiderFile.write("\t\t\titem['_" + str(x) + "'] = row.xpath('td[" + str(x + 1) + "]/text()').extract()\n") # scrape table rows based on attribute
-		newSpiderFile.write("\t\t\tyield item")
+	spiderTemplate = open("spider.py", "r") # open template
+	contents = spiderTemplate.readlines() # read contents of template
+	spiderTemplate.close() # close template
+
+	projectName = entries[0][1].get() # get project name as string
+	url = entries[1][1].get() # get url as string
+	attribtue = entries[2][1].get() # get attribute as string
+	value = entries[3][1].get() # get attribtue value as string
+	numberOfColumns = int(entries[4][1].get()) # get number of columns as int
+
+	# substitute user values for placeholders
+	contents = [line.replace('$VALUE', value) for line in [line.replace('$URL', url) for line in [line.replace('$ATTRIBUTE', attribtue) for line in [line.replace('$NAME', projectName) for line in contents]]]]
+
+	# fill in column headers
+	for x in range(numberOfColumns):
+		contents.insert(x+3, "\t_" + str(x) + " = scrapy.Field()\n")
+
+	# fill in data extraction code
+	for z in range(numberOfColumns):
+		contents.insert(z+12+numberOfColumns, "\t\t\titem['_" + str(z) + "'] = row.xpath('td[" + str(z + 1) + "]/text()').extract()\n")
+
+	spiderFile = open(projectName + "-spider.py", "w+") # create new tailored spider file
+	contents = "".join(contents) # join contents into single string
+	spiderFile.write(contents) # write to new spider file
+	spiderFile.close() # close new spider file
 
 def runScrapy(): # execute shell commands
-	startProject = "scrapy startproject " + userInput['project'] # create new scrapy project
-	moveSpider = "mv ./" + userInput['project'] + ".py ./" + userInput['project'] + "/" + userInput['project'] + "/spiders/" + userInput['project'] + "_spider.py" # install our custom spider
-	runSpider = "scrapy runspider " + userInput['project'] + "/" + userInput['project'] + "/spiders/" + userInput['project'] + "_spider.py -o data.csv -t csv" # run the spider
-	subprocess.Popen(startProject.split(),stdout=subprocess.PIPE)
+	projectName = entries[0][1].get()
+	projectSpiderName = projectName + "-spider.py"
+	startProject = "scrapy startproject " + projectName # create new scrapy project
+	moveSpider = "mv " + projectSpiderName + " " + projectName + "/" + projectName + "/spiders/" + projectSpiderName # install our custom spider
+	runSpider = "scrapy runspider " + projectName + "/" + projectName + "/spiders/" + projectSpiderName + " -o data.csv -t csv" # run the spider
+	subprocess.Popen(startProject.split(),stdout=subprocess.PIPE) # run in shell
 	time.sleep(2) # wait for scrapy to build
-	subprocess.Popen(moveSpider.split(),stdout=subprocess.PIPE)
-	subprocess.Popen(runSpider.split(),stdout=subprocess.PIPE)
+	subprocess.Popen(moveSpider.split(),stdout=subprocess.PIPE) # run in shell
+	subprocess.Popen(runSpider.split(),stdout=subprocess.PIPE) # run in shell
 
 def cleanUp(): # clear gui fields
-	cleanup = "rm -r " + userInput['project'] + " && rm " + userInput['project'] + ".py" # cleanup Scrapy files
+	projectName = entries[0][1].get() # get project name as string
+
+	# remove first row (placeholder column headers)
+	with open("data.csv","r") as dataFile: 
+		with open(projectName + ".csv", "w") as outputFile:
+			dataFile.next() # remove first row 
+			for line in dataFile:
+				outputFile.write(line)
+
+	cleanup = "rm -r " + projectName + " && rm data.csv" # cleanup Scrapy files
 	subprocess.Popen(cleanup.split(),stdout=subprocess.PIPE)
-	projectNameEntry.delete(0,END) # clear project name
-	columnField.set('1') # reset number of columns
-	urlEntry.delete(0,END) # clear url
-	tableAttributeEntry.delete(0,END) # clear table attribute
-	tableAttributeValueEntry.delete(0,END) # clear attribute value
 
 def scrape(): # high level function execution
-	getFields() # get gui fields
 	generateSpider() # generate custom spider
 	runScrapy() # run scrapy
 	time.sleep(1) # wait for runScrapy to finish
 	cleanUp() # remove unnecessary files
-
-##### GUI STUFF #####
-
-projectNameLabel = tk.Label(root,text="Project Name: ").grid(row=0,column=0) # project name label
-urlLabel = tk.Label(root,text="URL: ").grid(row=1,column=0) # url label
-tableAttributeLabel = tk.Label(root,text="table attribute: ").grid(row=2,column=0) # table attribute label
-tableAttributeValueLabel = tk.Label(root,text="table attribute value: ").grid(row=3,column=0) # attribute value label
-columnLabel = tk.Label(root,text="Number of columns: ").grid(row=4,column=0) # column label
-
-columnField = StringVar(root) # instantiate column field
-columnField.set('1') # default value
-columnMenu = OptionMenu(root,columnField,'1','2','3','4','5','6','7','8').grid(row=4,column=1) # drop down menu values
-
-projectNameEntry = Entry(root) # instantiate project name
-projectNameEntry.grid(row=0,column=1)
-urlEntry = Entry(root) # instantiate url
-urlEntry.grid(row=1,column=1)
-tableAttributeEntry = Entry(root) # instantiate table attribute
-tableAttributeEntry.grid(row=2,column=1)
-tableAttributeValueEntry = Entry(root) # instantiate attribute value
-tableAttributeValueEntry.grid(row=3,column=1)
-
-scrapeButton = tk.Button(root,text="Scrape",command=scrape).grid(row=5,column=1) # scrape button, calls scrape() when clicked
  
-root.mainloop() # run tkinter
+##### MAIN ROUTINE #####
+if __name__ == '__main__':
+	root = tk.Tk() # root of gui
+	root.title("Web Table Scraper") # set window title
+	entries = generateForm(root, fields) # generate form gui
+	scrapeButton = tk.Button(root,text="Scrape",command=scrape) # scrape button, calls scrape() when clicked
+	scrapeButton.pack(side=RIGHT, padx=5, pady=5) # initialize scrape button
+	root.mainloop() # run tkinter
