@@ -1,13 +1,15 @@
 # Web-Table-Scraper
-A simple HTML table scraping program using ScraPy
+A simple HTML table scraping program for macOS using ScraPy
 
 # Dependencies
 [ScraPy](https://scrapy.org/download/)
 
 Tkinter
 
-# Execution
-`$ python scraper.py`
+# How to Run It
+Ensure `scraper.py` and `spider.py` are in the same directory.
+
+Run `$ python scraper.py`in shell.
 
 # Example
 The following table comes from https://www.w3schools.com/html/html_tables.asp:
